@@ -41,7 +41,7 @@ DevOps agent software can be installed on a variety of hosts.
   
   RUN apt update
   RUN apt upgrade -y
-  RUN apt install -y curl git jq libicu70 nodejs
+  RUN apt install -y curl git jq libicu70 nodejs zip unzip
   
   # Also can be "linux-arm", "linux-arm64".
   ENV TARGETARCH="linux-x64"
@@ -53,9 +53,9 @@ DevOps agent software can be installed on a variety of hosts.
   
   RUN useradd agent
   RUN chown agent ./
-  USER agent
+  # USER agent
   # Another option is to run the agent as root.
-  # ENV AGENT_ALLOW_RUNASROOT="true"
+  ENV AGENT_ALLOW_RUNASROOT="true"
   
   ENTRYPOINT ./start.sh
   ```
