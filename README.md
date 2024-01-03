@@ -28,6 +28,9 @@ DevOps agent software can be installed on a variety of hosts.
 * For further details refer to [Self Hosted Windows Agent](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/windows-agent?view=azure-devops#download-and-configure-the-agent)
 
 ## Self Hosted Agent in Docker Desktop
+* Go to `dev.azure.com/{DevOps-Org-Name}`
+* Click on `Organisation Settings -> Agent Pools (under Pipelines section) -> Click on Add Pool`
+* Select Pool Type as Self Hosted, and assign a Pool name, for example `TestPool`
 * Follow the instructions in [Self Hosted Agent in Docker for Linux](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops) to create:
   * `Dockerfile` for Ubuntu 22.04
   * `start.sh`
