@@ -27,7 +27,7 @@ DevOps agent software can be installed on a variety of hosts.
   * It will prompt for few other details like working directory, run agent as a service etc
 * For further details refer to [Self Hosted Windows Agent](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/windows-agent?view=azure-devops#download-and-configure-the-agent)
 
-## Self Hosted Agent in Docker Desktop
+## Self Hosted Agent in Docker
 * Go to `dev.azure.com/{DevOps-Org-Name}`
 * Click on `Organisation Settings -> Agent Pools (under Pipelines section) -> Click on Add Pool`
 * Select Pool Type as Self Hosted, and assign a Pool name, for example `TestPool`
@@ -45,6 +45,9 @@ DevOps agent software can be installed on a variety of hosts.
   RUN apt update
   RUN apt upgrade -y
   RUN apt install -y curl git jq libicu70 nodejs zip unzip
+  RUN curl -fsSL https://get.docker.com -o get-docker.sh
+  RUN chmod +x get-docker.sh
+  RUN sh get-docker.sh
   
   # Also can be "linux-arm", "linux-arm64".
   ENV TARGETARCH="linux-x64"
@@ -69,17 +72,18 @@ DevOps agent software can be installed on a variety of hosts.
   
 * Run Docker image:
 
-  `docker run -e AZP_URL="<Azure DevOps instance>" -e AZP_TOKEN="<Personal Access Token>" -e AZP_POOL="<Agent Pool Name>" -e AZP_AGENT_NAME="Docker Agent - Linux" --name "azp-agent-linux" azp-agent:linux`
+  `docker run -e AZP_URL="<Azure DevOps instance>" -e AZP_TOKEN="<Personal Access Token>" -e AZP_POOL="<Agent Pool Name>" -e AZP_AGENT_NAME="Docker Agent - Linux" -v /var/run/docker.sock:/var/run/docker.sock --name "azp-agent-linux" azp-agent:linux`
 
   where:
   * AZP_URL = `https://dev.azure.com/{DevOps-Org-Name}/`
   * AZP_TOKEN = Follow instructions in [PAT Token](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=Windows#create-personal-access-tokens-to-authenticate-access) to create a PAT token
   * AZP_AGENT_NAME = Name of an agent within a pool. This name can be anything. For example, I called it `AdoDockerSelfHostedAgent`
   * AZP_POOL = Name of the Agent pool. If this is not specified it uses `default` pool
+  * -v /var/run/docker.sock - is to allow to run Docker within the DevOps Agent docker container
  
  * For example:
    
-   `docker run -e AZP_URL=https://dev.azure.com/Architecture -e AZP_TOKEN={pat-token-value} -e AZP_POOL=TestPool -e AZP_AGENT_NAME=AdoDockerSelfHostedAgent --name "azp-agent-linux" azp-agent:linux`
+   `docker run -e AZP_URL=https://dev.azure.com/Architecture -e AZP_TOKEN={pat-token-value} -e AZP_POOL=TestPool -e AZP_AGENT_NAME=AdoDockerSelfHostedAgent -v /var/run/docker.sock:/var/run/docker.sock --name "azp-agent-linux" azp-agent:linux`
 
 * Once the agent is run it should display something like:
 
